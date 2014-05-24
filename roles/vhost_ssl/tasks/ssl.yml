@@ -1,0 +1,10 @@
+---
+- name: Create Apache vhost 
+  template: src=vhost_ssl.conf.j2 dest={{ apache_dir }}/{{ site_url }}-ssl.conf owner=root
+
+- name: Enable the vhost on Debian family
+  shell: a2ensite {{ site_url }}-ssl.conf
+  when: ansible_os_family == "Debian"
+
+- name: Reload apache
+  service: name={{ apache }} state=reloaded 

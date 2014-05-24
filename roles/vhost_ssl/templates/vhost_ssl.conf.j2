@@ -1,0 +1,27 @@
+NameVirtualHost {{ ssl_ip | default('*') }}:{{ apache_ssl_port|default('443') }} 
+<VirtualHost {{ ssl_ip | default('*') }}:{{ apache_ssl_port | default('443') }}>
+ ServerName {{ site_url }}
+ #ServerAlias www.{{ site_url }}
+ DocumentRoot {{ apache_docroot }}
+ <Directory {{ apache_docroot }}>
+  Options -Indexes +FollowSymLinks -MultiViews
+  AllowOverride All
+ </Directory>
+ ErrorLog {{ apache_logs }}/{{ site_url }}-ssl_error_log
+ CustomLog {{ apache_logs }}/{{ site_url }}-ssl_access_log {{ log_format }}
+ LogLevel warn
+ SSLEngine on
+ SSLCertificateFile  {{ cert_dir }}/{{ site_url }}-ansible.crt
+ SSLCertificateKeyFile {{ key_dir }}/{{ site_url }}-ansible.key
+ SSLCACertificateFile {{ cert_dir}}/{{site_url}}-ansible.crt.ca
+ SSLProtocol all -SSLv2
+ SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+
+ <FilesMatch "\.(cgi|shtml|phtml|php)$">
+   SSLOptions +StdEnvVars
+  </FilesMatch>
+  BrowserMatch "MSIE [2-6]" \
+  nokeepalive ssl-unclean-shutdown \
+  downgrade-1.0 force-response-1.0
+  BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+</VirtualHost>

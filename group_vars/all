@@ -1,0 +1,10 @@
+site_url: 
+apache_ssl_port: 443 
+ssl_ip: '*'
+log_format: combined
+apache_docroot: 
+
+# Certificates on local files folder
+cert_file: cert
+key_file: key
+ca_file: CA

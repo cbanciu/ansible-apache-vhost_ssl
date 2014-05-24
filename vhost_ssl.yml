@@ -1,0 +1,17 @@
+---
+- name: Gather information
+  hosts: all 
+  #user: root
+  vars_files:
+    - "group_vars/{{ ansible_os_family }}.yml"
+  remote_user: root  
+  #sudo: yes
+  gather_facts: True 
+
+- name: Add the Apache Virtual Host 
+  hosts: web
+  remote_user: root
+  #sudo: yes
+  roles:
+     - vhost_ssl
+     

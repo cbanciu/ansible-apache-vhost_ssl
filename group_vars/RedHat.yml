@@ -1,0 +1,9 @@
+---
+# RedHat values
+
+apache: httpd
+apache_logs: /var/log/httpd
+apache_dir: /etc/httpd/conf.d
+apache_group: apache
+cert_dir: /etc/pki/tls/certs
+key_dir: /etc/pki/tls/private

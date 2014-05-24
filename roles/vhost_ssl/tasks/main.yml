@@ -1,0 +1,33 @@
+---
+- name: Enable mod_ssl on RHEL
+  yum: name=mod_ssl state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Enable mod_ssl on Debian
+  apache2_module: name=ssl state=present
+  when: ansible_os_family == "Debian"
+
+- name: Copy the certificate
+  copy: src={{ cert_file }} dest={{ cert_dir }}/{{ site_url }}-ansible.crt owner=root mode=0644
+
+- name: Copy the CA bundle
+  copy: src={{ ca_file }} dest={{ cert_dir}}/{{site_url}}-ansible.crt.ca owner=root mode=0644
+
+- name: Copy the key
+  copy: src={{ key_file }} dest={{ key_dir }}/{{ site_url }}-ansible.key owner=root mode=0600
+
+- name: Test the keys - cert
+  shell: chdir={{ cert_dir }} openssl x509 -noout -modulus -in {{ site_url }}-ansible.crt | openssl md5
+  register: md5_certificate
+
+- name: Test test the keys - key
+  shell: chdir={{ key_dir }} openssl rsa -noout -modulus -in {{ site_url }}-ansible.key | openssl md5
+  register: md5_key
+
+- name: Get CN_name
+  shell: chdir={{ cert_dir }} openssl x509 -noout -in {{ site_url }}-ansible.crt -subject | awk '{print $NF}' | cut -d= -f2
+  register: cn_name
+
+- name: Enable SSL vhosts
+  include: ssl.yml
+  when: md5_certificate.stdout == md5_key.stdout and cn_name.stdout == "{{ site_url }}"
