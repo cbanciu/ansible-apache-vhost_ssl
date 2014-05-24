@@ -5,7 +5,6 @@
 ansible-playbook -i inventory vhost_ssl.yml
 ***
 
-***
 <strong>Checks:</strong> <br />
 1. Cert md5sum matches key md5sum <br />
 2. Cert CN matches Apache ServerName. I suppose this might break SAN certificates. <br />
