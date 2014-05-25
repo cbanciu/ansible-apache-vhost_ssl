@@ -20,7 +20,7 @@ apache_docroot ==> Virtual Host DocumentRoot. <br />
 ssl_ip ==> Virtual Host Listening IP. <br />
 cert_file ==> Local certification file which will be copied to the remote host. Default name: cert <br />
 key_file ==> Local key file to be copied to the remote host. Default name: key <br />
-ca_file ==> Local CA bundle to be copied to the remote host. Default name: CA <br /?
+ca_file ==> Local CA bundle to be copied to the remote host. Default name: CA <br />
 
 OS family variables:
 
